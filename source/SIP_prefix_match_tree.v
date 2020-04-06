@@ -4,7 +4,7 @@
 /*
  * @Author: Yihao Wang
  * @Date: 2020-04-05 16:28:05
- * @LastEditTime: 2020-04-05 21:53:07
+ * @LastEditTime: 2020-04-05 22:57:18
  * @LastEditors: Please set LastEditors
  * @Description: 
  *           a. Prefix match tree is used for longest prefix matching
@@ -356,3 +356,55 @@
     end
 
 //// Stage #4 /////////////////////////////////////////////////////////////////////////////////// 
+
+    // The rule ID set attached to each leaf node (leaf_node0 to lead_node12)
+    // Each 3-bit rule ID is attached with 1-bit valid bit
+    localparam  LEAF_NODE_0 = 32'b0, // no rules in this rule ID set
+                LEAF_NODE_1 = 32'b0000_0000_0000_0000_0000_0000_1110_1111,
+                LEAF_NODE_2 = 32'b0000_0000_0000_0000_0000_1101_1110_1111,
+                LEAF_NODE_3 = 32'b0000_0000_0000_0000_1000_1011_1110_1111,
+                LEAF_NODE_4 = 32'b0000_0000_0000_1001_1011_1101_1110_1111,
+                LEAF_NODE_5 = 32'b0000_0000_0000_1000_1011_1101_1110_1111,
+                LEAF_NODE_6 = 32'b0000_0000_0000_0000_1011_1101_1110_1111,
+                LEAF_NODE_7 = 32'b0000_0000_0000_1010_1011_1101_1110_1111,
+                LEAF_NODE_8 = 32'b0000_0000_0000_0000_1011_1101_1110_1111,
+                LEAF_NODE_9 = 32'b0000_0000_0000_0000_0000_1101_1110_1111,
+                LEAF_NODE_10 = 32'b0000_0000_0000_0000_1100_1101_1110_1111,
+                LEAF_NODE_11 = 32'b0000_0000_0000_0000_0000_1101_1110_1111,
+                LEAF_NODE_12 = 32'b0000_0000_0000_0000_0000_0000_0000_1111;
+
+    reg [0:`NUM_RULE_ID + `RULE_ID_WIDTH * `NUM_RULE_ID - 1] out_reg; // the output register
+    
+    always @(posedge clk)
+    begin
+        if(reset) out_reg <= 0;
+        else
+        begin
+            out_reg <= 0;
+
+            // Because there should be only one asserted valid bit 
+            // Using parallel if statement to implement output MUX
+            if(node7_l_valid == 1) out_reg <= LEAF_NODE_0;
+            if(node7_r_valid == 1) out_reg <= LEAF_NODE_1;
+            if(node8_l_valid == 1) out_reg <= LEAF_NODE_2;
+            if(node8_r_valid == 1) out_reg <= LEAF_NODE_3;
+            if(node9_l_valid == 1) out_reg <= LEAF_NODE_4;
+            if(node9_r_valid == 1) out_reg <= LEAF_NODE_5;
+            if(node4_r_valid_r == 1) out_reg <= LEAF_NODE_6;
+            if(node5_l_valid_r == 1) out_reg <= LEAF_NODE_7;
+            if(node10_l_valid == 1) out_reg <= LEAF_NODE_8;
+            if(node10_r_valid == 1) out_reg <= LEAF_NODE_9;
+            if(node11_l_valid == 1) out_reg <= LEAF_NODE_10;
+            if(node11_r_valid == 1) out_reg <= LEAF_NODE_11; 
+            if(node6_r_valid_r == 1) out_reg <= LEAF_NODE_12;
+
+        end
+    end          
+
+    // Generates output
+    assign out = out_reg;
+
+ endmodule            
+`undef IP_WIDTH
+`undef NUM_RULE_ID
+`undef RULE_ID_WIDTH
