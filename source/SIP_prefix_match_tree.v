@@ -4,13 +4,14 @@
 /*
  * @Author: Yihao Wang
  * @Date: 2020-04-05 16:28:05
- * @LastEditTime: 2020-04-05 22:57:18
+ * @LastEditTime: 2020-04-07 02:53:34
  * @LastEditors: Please set LastEditors
  * @Description: 
  *           a. Prefix match tree is used for longest prefix matching
  *           b. Only responsible for prefix matching for SIP
  *           c. The length of IP is assumed to be 32-bit （0.0.0.0 - 255.255.255.255）
- *           d. It supports rule set with 8 rules:
+ *           d. Both input and output are registered
+ *           f. It supports rule set with 8 rules:
  *               rule 0: 192.168.0.0-255
  *               rule 1: 192.168.0.32-128
  *               rule 2: 192.168.32-128.0-255
@@ -23,7 +24,7 @@
  */
  module SIP_prefix_match_tree (
      input clk, reset, // sync high active reset and positive clk edge triggering
-     input [0:`IP_WIDTH] in, // 1-bit valid bit and 32-bit IP input
+     input [0:`IP_WIDTH] in, // 1-bit(MSB) valid bit and 32-bit IP input
 
      // outputs one rule ID set; In each rule ID set, each rule ID is attached with one valid bit
      // The rule ID in each rule ID set must be in order and distint
