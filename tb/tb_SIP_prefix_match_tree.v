@@ -7,7 +7,7 @@
 /*
  * @Author: Yihao Wang
  * @Date: 2020-04-07 02:43:31
- * @LastEditTime: 2020-04-07 03:02:27
+ * @LastEditTime: 2020-04-07 15:51:01
  * @LastEditors: Please set LastEditors
  * @Description: Testbench for SIP_prefix_match_tree.v
  * @FilePath: /EE599_FPGA_package_classification/source/tb_SIP_prefix_match_tree.v
@@ -19,8 +19,8 @@
 
     parameter   IP_FIELD_0 = 192,
                 IP_FIELD_1 = 168,
-                IP_FIELD_2 = 33,
-                IP_FIELD_3 = 65;
+                IP_FIELD_2 = 0,
+                IP_FIELD_3 = 128;
 
     // output rule ID set, each 3-bit rule ID is attached with 1-bit valid bit
     wire [0:`NUM_RULE_ID + `RULE_ID_WIDTH * `NUM_RULE_ID - 1] out; 

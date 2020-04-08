@@ -4,12 +4,12 @@
 /*
  * @Author: Yihao Wang
  * @Date: 2020-04-05 16:28:05
- * @LastEditTime: 2020-04-07 02:53:34
+ * @LastEditTime: 2020-04-07 16:46:57
  * @LastEditors: Please set LastEditors
  * @Description: 
  *           a. Prefix match tree is used for longest prefix matching
  *           b. Only responsible for prefix matching for SIP
- *           c. The length of IP is assumed to be 32-bit （0.0.0.0 - 255.255.255.255）
+ *           c. The length of SIP is assumed to be 32-bit （0.0.0.0 - 255.255.255.255）
  *           d. Both input and output are registered
  *           f. It supports rule set with 8 rules:
  *               rule 0: 192.168.0.0-255
@@ -219,14 +219,6 @@
 
 //// Stage #3 /////////////////////////////////////////////////////////////////////////////////// 
 
-    reg [0:`IP_WIDTH - 1] IP_stage3; // The stage register used to registered 32-bit IP     
-
-    always @(posedge clk)
-    begin
-        if(reset) IP_stage3 <= 0;
-        else IP_stage3 <= IP_stage2;
-    end
-
     //// Node #7: compared with 192.0.0.0
     reg node7_l_valid, node7_r_valid;   // two valid bit used for two kid nodes: left and right
                                         // l_valid = 1 means the left kid node will be activated in next stage
@@ -358,13 +350,13 @@
 
 //// Stage #4 /////////////////////////////////////////////////////////////////////////////////// 
 
-    // The rule ID set attached to each leaf node (leaf_node0 to lead_node12)
+    // The rule ID set attached to each leaf node (leaf_node0 to leaf_node12)
     // Each 3-bit rule ID is attached with 1-bit valid bit
     localparam  LEAF_NODE_0 = 32'b0, // no rules in this rule ID set
                 LEAF_NODE_1 = 32'b0000_0000_0000_0000_0000_0000_1110_1111,
                 LEAF_NODE_2 = 32'b0000_0000_0000_0000_0000_1101_1110_1111,
                 LEAF_NODE_3 = 32'b0000_0000_0000_0000_1000_1011_1110_1111,
-                LEAF_NODE_4 = 32'b0000_0000_0000_1001_1011_1101_1110_1111,
+                LEAF_NODE_4 = 32'b0000_0000_1000_1001_1011_1101_1110_1111,
                 LEAF_NODE_5 = 32'b0000_0000_0000_1000_1011_1101_1110_1111,
                 LEAF_NODE_6 = 32'b0000_0000_0000_0000_1011_1101_1110_1111,
                 LEAF_NODE_7 = 32'b0000_0000_0000_1010_1011_1101_1110_1111,
