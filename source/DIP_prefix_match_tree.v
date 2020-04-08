@@ -4,17 +4,16 @@
 /*
  * @Author: Yihao Wang
  * @Date: 2020-04-07 15:54:16
- * @LastEditTime: 2020-04-07 17:16:59
+ * @LastEditTime: 2020-04-07 17:47:56
  * @LastEditors: Please set LastEditors
  * @Description: 
-*           a. Prefix match tree is used for longest prefix matching
- *           b. Only responsible for prefix matching for DIP
- *           c. The length of DIP is assumed to be 32-bit （0.0.0.0 - 255.255.255.255）
- *           d. Both input and output are registered
- *           f. It supports rule set with 8 rules:
+ *           a. Prefix match tree is used for longest prefix matching of destination IP
+ *           b. The length of DIP is assumed to be 32-bit （0.0.0.0 - 255.255.255.255）
+ *           c. Both input and output are registered
+ *           d. It supports rule set with 8 rules:
  *               rule 0: 213.0.0.0-64
  *               rule 1: 213.0.0.65-255
- *               rule 2: 213。0-32.0-255.0-255
+ *               rule 2: 213.0-32.0-255.0-255
  *               rule 3: 213.33-128.0-255.0-255
  *               rule 4: 213.128.0-128.0-255
  *               rule 5: 213.128.129-255.0-255

@@ -4,14 +4,13 @@
 /*
  * @Author: Yihao Wang
  * @Date: 2020-04-05 16:28:05
- * @LastEditTime: 2020-04-07 16:46:57
+ * @LastEditTime: 2020-04-07 17:45:11
  * @LastEditors: Please set LastEditors
  * @Description: 
- *           a. Prefix match tree is used for longest prefix matching
- *           b. Only responsible for prefix matching for SIP
- *           c. The length of SIP is assumed to be 32-bit （0.0.0.0 - 255.255.255.255）
- *           d. Both input and output are registered
- *           f. It supports rule set with 8 rules:
+ *           a. Prefix match tree is used for longest prefix matching of source IP
+ *           b. The length of SIP is assumed to be 32-bit （0.0.0.0 - 255.255.255.255）
+ *           c. Both input and output are registered
+ *           d. It supports rule set with 8 rules:
  *               rule 0: 192.168.0.0-255
  *               rule 1: 192.168.0.32-128
  *               rule 2: 192.168.32-128.0-255
