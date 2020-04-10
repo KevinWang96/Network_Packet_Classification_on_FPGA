@@ -4,12 +4,12 @@
 /*
  * @Author: Yihao Wang
  * @Date: 2020-04-07 15:54:16
- * @LastEditTime: 2020-04-08 02:19:55
+ * @LastEditTime: 2020-04-08 21:23:45
  * @LastEditors: Please set LastEditors
  * @Description: 
  *           a. Prefix match tree is used for longest prefix matching of destination IP
  *           b. The length of DIP is assumed to be 32-bit （0.0.0.0 - 255.255.255.255）
- *           c. Both input and output are registered
+ *           c. 5-satge pipeline, both input and output are registered
  *           d. It supports rule set with 8 rules:
  *               rule 0: 213.0.0.0-64
  *               rule 1: 213.0.0.65-255

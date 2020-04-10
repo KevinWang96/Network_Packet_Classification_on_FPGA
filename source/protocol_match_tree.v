@@ -4,12 +4,12 @@
 /*
  * @Author: Yihao Wang
  * @Date: 2020-04-07 23:37:34
- * @LastEditTime: 2020-04-08 02:04:23
+ * @LastEditTime: 2020-04-08 21:23:23
  * @LastEditors: Please set LastEditors
  * @Description:
  *           a. Exact match tree is used for exact matching of protocol ID
  *           b. The length of protocol ID is assumed to be 8-bit width （0x00 - 0xFF）
- *           c. Both input and output are registered
+ *           c. 5-satge pipeline, both input and output are registered
  *           d. It supports rule set with 8 rules:
  *               rule 0: 0x03
  *               rule 1: 0x06

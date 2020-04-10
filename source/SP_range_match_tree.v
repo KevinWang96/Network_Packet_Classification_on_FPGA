@@ -4,12 +4,12 @@
 /*
  * @Author: Yihao Wang
  * @Date: 2020-04-07 17:43:11
- * @LastEditTime: 2020-04-08 02:06:40
+ * @LastEditTime: 2020-04-08 21:24:10
  * @LastEditors: Please set LastEditors
  * @Description: 
  *           a. Range match tree is used for range matching of source port ID
  *           b. The length of SP is assumed to be 16-bit width （0 - 65535）
- *           c. Both input and output are registered
+ *           c. 5-satge pipeline, both input and output are registered
  *           d. It supports rule set with 8 rules:
  *               rule 0: 0 - 1023
  *               rule 1: 1024 - 49151
