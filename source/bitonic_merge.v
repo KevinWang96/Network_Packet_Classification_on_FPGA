@@ -1,7 +1,7 @@
 /*
  * @Author: Yihao Wang
  * @Date: 2020-04-09 20:41:34
- * @LastEditTime: 2020-04-09 22:50:35
+ * @LastEditTime: 2020-04-10 01:20:18
  * @LastEditors: Please set LastEditors
  * @Description: a. Scaleable N-input Bitonic Merge Network, N must be (2 ^ (x)), x is integer
  *               b. Pipelined structure and both input and output are registered
@@ -17,7 +17,7 @@
      parameter polarity = 0 // 0 means: positive sorting; 1 means negative sorting
  )
  (
-     input clk, sync, // positve edge triggering and sync high active reset
+     input clk, reset, // positve edge triggering and sync high active reset
      input [0:INPUT_WIDTH * N - 1] in, 
      output [0:INPUT_WIDTH * N - 1] out
  );
@@ -41,33 +41,33 @@
             begin : i_loop
                 for(j = 0; j < 2 ** i; j = j + 1) // there are (2 ** i) sub-sequence
                 begin : j_loop
-                    for(k = 0; k < N / (2 ** (i + 1))) // do compare-exchange in each sub-sequence
+                    for(k = 0; k < N / (2 ** (i + 1)); k = k + 1) // do compare-exchange in each sub-sequence
                     begin : k_loop
 
                         always @(posedge clk)
                         begin
                             if(reset) 
                             begin
-                                stage_reg[i + 1][((j + k) * INPUT_WIDTH)+:INPUT_WIDTH] <= 0;
-                                stage_reg[i + 1][((j + k + (2 ** (i + 1)) * INPUT_WIDTH)+:INPUT_WIDTH] <= 0;
+                                stage_reg[i + 1][((j * N / (2 ** i) + k) * INPUT_WIDTH)+:INPUT_WIDTH] <= 0;
+                                stage_reg[i + 1][((j * N / (2 ** i) + k + N / (2 ** (i + 1))) * INPUT_WIDTH)+:INPUT_WIDTH] <= 0;
                             end
                             else
                             begin
                                 // if x elements is greater than (x + n / 2) elements, switch them
-                                if( stage_reg[i][((j + k) * INPUT_WIDTH)+:INPUT_WIDTH] 
-                                    > stage_reg[i][((j + k + (2 ** (i + 1)) * INPUT_WIDTH)+:INPUT_WIDTH] )
+                                if( stage_reg[i][((j * N / (2 ** i) + k) * INPUT_WIDTH)+:INPUT_WIDTH] 
+                                    > stage_reg[i][((j * N / (2 ** i) + k + N / (2 ** (i + 1))) * INPUT_WIDTH)+:INPUT_WIDTH] )
                                 begin
-                                    stage_reg[i + 1][((j + k) * INPUT_WIDTH)+:INPUT_WIDTH] 
-                                        <= stage_reg[i][((j + k + (2 ** (i + 1)) * INPUT_WIDTH)+:INPUT_WIDTH];
-                                    stage_reg[i + 1][((j + k + (2 ** (i + 1)) * INPUT_WIDTH)+:INPUT_WIDTH] 
-                                        <= stage_reg[i][((j + k) * INPUT_WIDTH)+:INPUT_WIDTH];
+                                    stage_reg[i + 1][((j * N / (2 ** i) + k) * INPUT_WIDTH)+:INPUT_WIDTH] 
+                                        <= stage_reg[i][((j * N / (2 ** i) + k + N / (2 ** (i + 1))) * INPUT_WIDTH)+:INPUT_WIDTH];
+                                    stage_reg[i + 1][((j * N / (2 ** i) + k + N / (2 ** (i + 1))) * INPUT_WIDTH)+:INPUT_WIDTH] 
+                                        <= stage_reg[i][((j * N / (2 ** i) + k) * INPUT_WIDTH)+:INPUT_WIDTH];
                                 end
                                 else // don't switch
                                 begin
-                                    stage_reg[i + 1][((j + k) * INPUT_WIDTH)+:INPUT_WIDTH] 
-                                        <= stage_reg[i][((j + k) * INPUT_WIDTH)+:INPUT_WIDTH];
-                                    stage_reg[i + 1][((j + k + (2 ** (i + 1)) * INPUT_WIDTH)+:INPUT_WIDTH] 
-                                        <= stage_reg[i][((j + k + (2 ** (i + 1)) * INPUT_WIDTH)+:INPUT_WIDTH];
+                                    stage_reg[i + 1][((j * N / (2 ** i) + k) * INPUT_WIDTH)+:INPUT_WIDTH] 
+                                        <= stage_reg[i][((j * N / (2 ** i) + k) * INPUT_WIDTH)+:INPUT_WIDTH];
+                                    stage_reg[i + 1][((j * N / (2 ** i) + k + N / (2 ** (i + 1))) * INPUT_WIDTH)+:INPUT_WIDTH] 
+                                        <= stage_reg[i][((j * N / (2 ** i) + k + N / (2 ** (i + 1))) * INPUT_WIDTH)+:INPUT_WIDTH];
                                 end
                             end
                         end
@@ -81,33 +81,33 @@
             begin : i_loop
                 for(j = 0; j <= i; j = j + 1) // there are (i + 1) sub-sequence
                 begin : j_loop
-                    for(k = 0; k < N / (2 ** (i + 1))) // do compare-exchange in each sub-sequence
+                    for(k = 0; k < N / (2 ** (i + 1)); k = k + 1) // do compare-exchange in each sub-sequence
                     begin : k_loop
 
                         always @(posedge clk)
                         begin
                             if(reset) 
                             begin
-                                stage_reg[i + 1][((j + k) * INPUT_WIDTH)+:INPUT_WIDTH] <= 0;
-                                stage_reg[i + 1][((j + k + (2 ** (i + 1)) * INPUT_WIDTH)+:INPUT_WIDTH] <= 0;
+                                stage_reg[i + 1][((j * N / (2 ** i) + k) * INPUT_WIDTH)+:INPUT_WIDTH] <= 0;
+                                stage_reg[i + 1][((j * N / (2 ** i) + k + N / (2 ** (i + 1))) * INPUT_WIDTH)+:INPUT_WIDTH] <= 0;
                             end
                             else
                             begin
                                 // if x elements is greater than (x + n / 2) elements, switch them
-                                if( stage_reg[i][((j + k) * INPUT_WIDTH)+:INPUT_WIDTH] 
-                                    < stage_reg[i][((j + k + (2 ** (i + 1)) * INPUT_WIDTH)+:INPUT_WIDTH] )
+                                if( stage_reg[i][((j * N / (2 ** i) + k) * INPUT_WIDTH)+:INPUT_WIDTH] 
+                                    < stage_reg[i][((j * N / (2 ** i) + k + N / (2 ** (i + 1))) * INPUT_WIDTH)+:INPUT_WIDTH] )
                                 begin
-                                    stage_reg[i + 1][((j + k) * INPUT_WIDTH)+:INPUT_WIDTH] 
-                                        <= stage_reg[i][((j + k + (2 ** (i + 1)) * INPUT_WIDTH)+:INPUT_WIDTH];
-                                    stage_reg[i + 1][((j + k + (2 ** (i + 1)) * INPUT_WIDTH)+:INPUT_WIDTH] 
-                                        <= stage_reg[i][((j + k) * INPUT_WIDTH)+:INPUT_WIDTH];
+                                    stage_reg[i + 1][((j * N / (2 ** i) + k) * INPUT_WIDTH)+:INPUT_WIDTH] 
+                                        <= stage_reg[i][((j * N / (2 ** i) + k + N / (2 ** (i + 1))) * INPUT_WIDTH)+:INPUT_WIDTH];
+                                    stage_reg[i + 1][((j * N / (2 ** i) + k + N / (2 ** (i + 1))) * INPUT_WIDTH)+:INPUT_WIDTH] 
+                                        <= stage_reg[i][((j * N / (2 ** i) + k) * INPUT_WIDTH)+:INPUT_WIDTH];
                                 end
                                 else // don't switch
                                 begin
-                                    stage_reg[i + 1][((j + k) * INPUT_WIDTH)+:INPUT_WIDTH] 
-                                        <= stage_reg[i][((j + k) * INPUT_WIDTH)+:INPUT_WIDTH];
-                                    stage_reg[i + 1][((j + k + (2 ** (i + 1)) * INPUT_WIDTH)+:INPUT_WIDTH] 
-                                        <= stage_reg[i][((j + k + (2 ** (i + 1)) * INPUT_WIDTH)+:INPUT_WIDTH];
+                                    stage_reg[i + 1][((j * N / (2 ** i) + k) * INPUT_WIDTH)+:INPUT_WIDTH] 
+                                        <= stage_reg[i][((j * N / (2 ** i) + k) * INPUT_WIDTH)+:INPUT_WIDTH];
+                                    stage_reg[i + 1][((j * N / (2 ** i) + k + (2 ** N / (i + 1))) * INPUT_WIDTH)+:INPUT_WIDTH] 
+                                        <= stage_reg[i][((j * N / (2 ** i) + k + N / (2 ** (i + 1))) * INPUT_WIDTH)+:INPUT_WIDTH];
                                 end
                             end
                         end
