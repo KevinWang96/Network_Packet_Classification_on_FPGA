@@ -1,7 +1,7 @@
 /*
  * @Author: Yihao Wang
  * @Date: 2020-04-09 20:41:34
- * @LastEditTime: 2020-04-10 01:20:18
+ * @LastEditTime: 2020-04-12 01:31:01
  * @LastEditors: Please set LastEditors
  * @Description: a. Scaleable N-input Bitonic Merge Network, N must be (2 ^ (x)), x is integer
  *               b. Pipelined structure and both input and output are registered
@@ -11,7 +11,7 @@
  * @FilePath: /EE599_FPGA_package_classification/source/bitonic_merge.v
  */
  module bitonic_merge #(
-     parameter N = 16, // the number of inputs log(N) must be an integer
+     parameter N = 16, // the number of inputs log(N) must be an positive integer
      parameter log_N = 4, // clogb2(N)
      parameter INPUT_WIDTH = 4, // the width for each input
      parameter polarity = 0 // 0 means: positive sorting; 1 means negative sorting
@@ -23,7 +23,7 @@
  );
     
     // Stage registers: log(NUM_INPUTS) stage registers are needed
-    reg [0:INPUT_WIDTH * N - 1] stage_reg [0:log_N]; // log(N) stage registers and one input register
+    (* ram_style = "block" *) reg [0:INPUT_WIDTH * N - 1] stage_reg [0:log_N]; // log(N) stage registers and one input register
 
     // Loads data into input register
     always @(posedge clk)
@@ -77,9 +77,9 @@
             end // end i_loop
 
         else // polarity == 1
-            for(i = 0; i < log_N; i = i + 1)
+            for(i = 0; i < log_N; i = i + 1) // there are log_N stages
             begin : i_loop
-                for(j = 0; j <= i; j = j + 1) // there are (i + 1) sub-sequence
+                for(j = 0; j < 2 ** i; j = j + 1) // there are (2 ** i) sub-sequence
                 begin : j_loop
                     for(k = 0; k < N / (2 ** (i + 1)); k = k + 1) // do compare-exchange in each sub-sequence
                     begin : k_loop
@@ -93,7 +93,7 @@
                             end
                             else
                             begin
-                                // if x elements is greater than (x + n / 2) elements, switch them
+                                // if x elements is less than or equal to (x + n / 2) elements, switch them
                                 if( stage_reg[i][((j * N / (2 ** i) + k) * INPUT_WIDTH)+:INPUT_WIDTH] 
                                     < stage_reg[i][((j * N / (2 ** i) + k + N / (2 ** (i + 1))) * INPUT_WIDTH)+:INPUT_WIDTH] )
                                 begin
@@ -106,7 +106,7 @@
                                 begin
                                     stage_reg[i + 1][((j * N / (2 ** i) + k) * INPUT_WIDTH)+:INPUT_WIDTH] 
                                         <= stage_reg[i][((j * N / (2 ** i) + k) * INPUT_WIDTH)+:INPUT_WIDTH];
-                                    stage_reg[i + 1][((j * N / (2 ** i) + k + (2 ** N / (i + 1))) * INPUT_WIDTH)+:INPUT_WIDTH] 
+                                    stage_reg[i + 1][((j * N / (2 ** i) + k + N / (2 ** (i + 1))) * INPUT_WIDTH)+:INPUT_WIDTH] 
                                         <= stage_reg[i][((j * N / (2 ** i) + k + N / (2 ** (i + 1))) * INPUT_WIDTH)+:INPUT_WIDTH];
                                 end
                             end
@@ -114,7 +114,7 @@
 
                     end // end k_loop
                 end // end j_loop
-            end // end i_loop
+            end // end 
             
     end
     endgenerate

@@ -2,15 +2,15 @@
 /*
  * @Author: Yihao Wang
  * @Date: 2020-04-10 00:38:45
- * @LastEditTime: 2020-04-10 01:52:30
+ * @LastEditTime: 2020-04-12 01:58:21
  * @LastEditors: Please set LastEditors
- * @Description: Testbench for bitonic_merge
+ * @Description: Testbench for bitonic_sort
  * @FilePath: /EE599_FPGA_package_classification/tb/tb_bitonic_merge.v
  */
-module tb_bitonic_merge;
+module tb_bitonic_sort;
 
-    localparam N = 16;
-    localparam INPUT_WIDTH = 6;
+    localparam N = 8;
+    localparam INPUT_WIDTH = 4;
     localparam CLK = 10;
 
     reg clk, reset;
@@ -18,7 +18,7 @@ module tb_bitonic_merge;
     wire [0:N * INPUT_WIDTH - 1] out;
 
     // DUT
-    bitonic_merge #(
+    bitonic_sort #(
         .N(N),
         .INPUT_WIDTH(INPUT_WIDTH),
         .log_N($clog2(N)),
@@ -42,7 +42,7 @@ module tb_bitonic_merge;
         #(3.5 * CLK) 
         reset = 0;
 
-        in = 256'hfe_dc_ba_98_01_23_45_67;
+        in = 32'h09_23_58_f4;
 
         #($clog2(N) * 2 * CLK)
         $finish;
