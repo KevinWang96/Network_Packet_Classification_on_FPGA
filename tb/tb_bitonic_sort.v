@@ -44,7 +44,7 @@ module tb_bitonic_sort;
 
         in = 32'h09_23_58_f4;
 
-        #($clog2(N) * 2 * CLK)
+        #($clog2(N) * 20 * CLK)
         $finish;
     end
 

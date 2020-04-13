@@ -1,17 +1,17 @@
 /*
  * @Author: Yihao Wang
- * @Date: 2020-04-12 17:23:31
- * @LastEditTime: 2020-04-13 01:18:21
+ * @Date: 2020-04-13 01:07:02
+ * @LastEditTime: 2020-04-13 01:17:44
  * @LastEditors: Please set LastEditors
  * @Description: a. Bitonic Merge and Neighborhood Checking Network with (log_N + 1) stages
- *               b. Used to merge two sequence with random order 
+ *               b. Used to merge two monotonic sequence ( one bitonic seqence)
  *                  and find common elements (duplicate twice)
  *               c. The elements in each input sequence must be distinct
- *               d. Step complexity O((log2(N) ** 2)), N is number of elements in each input sequence
+ *               d. Step complexity O(log2(N)), N is number of elements in each input sequence
  *               e. The output is N-bit (At most N elelments are duplicate)
- * @FilePath: /EE599_FPGA_package_classification/source/BMNC_random.v
+ * @FilePath: /EE599_FPGA_package_classification/source/BMNC_bitonic.v
  */
- module BMNC_random #(
+ module BMNC_bitonic #(
      parameter N = 8, // number of elements of each input sequence
      parameter log_N = 3, 
      parameter elements_width = 4 // width of each elements
@@ -21,17 +21,18 @@
      input [0:2 * N * elements_width - 1] in,
      output reg [0:N * elements_width - 1] out
  );
+    
+//// We only need used one BM(2 * N) to sort the input bitonic sequence
 
-//// First we need a bitonic sort network to sort 2 * N elements
     wire [0:2 * N * elements_width - 1] sort_res; // sorting results
 
-    bitonic_sort #(
+    bitonic_merge #(
         .N(2 * N),
         .log_N(log_N + 1),
         .INPUT_WIDTH(elements_width),
-        .polarity(0) // sorting in ascending order
+        .polarity(0)
     )
-    BS
+    BM
     (
         .clk(clk),
         .reset(reset),
@@ -100,3 +101,5 @@
     endgenerate
 
  endmodule
+
+
