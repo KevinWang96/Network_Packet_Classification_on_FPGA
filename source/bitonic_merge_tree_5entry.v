@@ -6,12 +6,12 @@
 /*
  * @Author: Yihao Wang
  * @Date: 2020-04-12 16:48:13
- * @LastEditTime: 2020-04-13 02:11:26
+ * @LastEditTime: 2020-04-17 21:57:34
  * @LastEditors: Please set LastEditors
  * @Description: a. A bitonic merge tree used to merge (NUM_RIDS) RIDSs and find common elements
  * @FilePath: /EE599_FPGA_package_classification/source/bitonic_merge_tree.v
  */
- module bitonic_merge_tree (
+ module bitonic_merge_tree_5entry (
      input clk, reset,
      input [0:`NUM_RIDS * `RIDS_WIDTH - 1] in,
      output [0:`RIDS_WIDTH - 1] out
