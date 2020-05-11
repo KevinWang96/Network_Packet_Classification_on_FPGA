@@ -3,7 +3,7 @@
 /*
  * @Author: Yihao Wang
  * @Date: 2020-04-11 17:37:54
- * @LastEditTime: 2020-04-11 18:25:42
+ * @LastEditTime: 2020-05-06 07:27:44
  * @LastEditors: Please set LastEditors
  * @Description: a. Source IP range match tree used to match each field of network packet
  *               b. Used binary search tree to achieve range matching 
@@ -27,22 +27,18 @@ module range_match_tree (
 
     blk_mem_gen_0 bound_mem_0 (
     .clka(clk),    // input wire clka
-    .ena(1'b1),      // input wire ena
     .addra(bound_mem_addr_0),  // input wire [3 : 0] addra
     .douta(bound_mem_do_0),  // output wire [31 : 0] douta
     .clkb(clk),    // input wire clkb
-    .enb(1'b1),      // input wire enb
     .addrb(bound_mem_addr_1),  // input wire [3 : 0] addrb
     .doutb(bound_mem_do_1)  // output wire [31 : 0] doutb
     );
 
-    blk_mem_gen_0 bound_mem_1 (
+    blk_mem_gen_1 bound_mem_1 (
     .clka(clk),    // input wire clka
-    .ena(1'b1),      // input wire ena
     .addra(bound_mem_addr_2),  // input wire [3 : 0] addra
     .douta(bound_mem_do_2),  // output wire [31 : 0] douta
     .clkb(clk),    // input wire clkb
-    .enb(1'b1),      // input wire enb
     .addrb(bound_mem_addr_3),  // input wire [3 : 0] addrb
     .doutb(bound_mem_do_3)  // output wire [31 : 0] doutb
     );
@@ -51,9 +47,8 @@ module range_match_tree (
     wire [0:3] RIDS_mem_addr;
     wire [0:`RIDS_width - 1] RIDS_mem_do;
 
-    blk_mem_gen_1 RIDS_mem (
+    blk_mem_gen_2 RIDS_mem (
     .clka(clk),    // input wire clka
-    .ena(1'b1),      // input wire ena
     .addra(RIDS_mem_addr),  // input wire [3 : 0] addra
     .douta(RIDS_mem_do)  // output wire [31 : 0] douta
     );

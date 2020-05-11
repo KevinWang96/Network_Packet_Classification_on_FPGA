@@ -1,13 +1,13 @@
 /*
  * @Author: Yihao Wang
  * @Date: 2020-04-17 19:03:02
- * @LastEditTime: 2020-04-17 23:00:56
+ * @LastEditTime: 2020-05-06 07:09:20
  * @LastEditors: Please set LastEditors
- * @Description: a. A scaleable bitonic merge tree used to merge M RIDS
+ * @Description: a. A scalable bitonic merge tree used to merge M RIDS
  *               b. Each input RIDS is assumed to be in ascending order and all elements are distinct
  * @FilePath: /EE599_FPGA_package_classification/source/bitonic_merge_tree_scaleable.v
  */
- module bitonic_merge_tree_scaleable #(
+ module bitonic_merge_tree_scalable #(
      parameter M = 256, // # of RIDS need to be merge, M msut be 2 ** (x), x is postive integer
      parameter log_M = 8, // log2(M)
      parameter RID_WIDTH = 4, // width of RID in each RIDS
